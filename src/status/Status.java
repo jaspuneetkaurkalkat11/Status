@@ -1,33 +1,58 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package status;
 
 import java.util.Scanner;
 
-/** This class takes String input from user 
- * and calls method statusDetail to print the 
- * status of User-Rejected,Pending,Processing and Approved.
- * if the input is not given in String, 
- * program will accept and produce wrong results. 
- * change the code to use enums which avoids String input 
- * then print the status details. 
+/**
+ * This class now uses an enum to handle user statuses, which improves type safety
+ * and reduces errors related to direct string manipulation.
+ * The user enters a status code as a numeric value which is then mapped to an enum constant.
  * @author srinivsi 
  */
 public class Status {
 
     /**
-     * @param args the command line arguments
+     * Enum for User Status with a method to print status details.
      */
-    public static void main(String[] args)
-    {
-    Scanner in =new Scanner(System.in);
-    System.out.println("Enter the user status code (zero,one,two,three) in string");
-    String code = in.next();
-    StausUser t= new StausUser();
-    t.statusDetail(code); 
+    enum UserStatus {
+        REJECTED, PENDING, PROCESSING, APPROVED;
+
+        public void printStatus() {
+            switch (this) {
+                case REJECTED:
+                    System.out.println("User status: Rejected");
+                    break;
+                case PENDING:
+                    System.out.println("User status: Pending");
+                    break;
+                case PROCESSING:
+                    System.out.println("User status: Processing");
+                    break;
+                case APPROVED:
+                    System.out.println("User status: Approved");
+                    break;
+                default:
+                    System.out.println("Unknown status");
+            }
+        }
     }
-    
+
+    /**
+     * Main method to run the application.
+     * @param args command line arguments
+     */
+    public static void main(String[] args) {
+        Scanner in = new Scanner(System.in);
+        System.out.println("Enter the user status code (0 for REJECTED, 1 for PENDING, 2 for PROCESSING, 3 for APPROVED):");
+        
+        int statusCode = in.nextInt();  // Changed from String to int for enum index
+        UserStatus[] statuses = UserStatus.values();
+
+        if (statusCode >= 0 && statusCode < statuses.length) {
+            UserStatus currentStatus = statuses[statusCode];
+            currentStatus.printStatus();
+        } else {
+            System.out.println("Invalid status code entered.");
+        }
+        in.close();
+    }
 }
